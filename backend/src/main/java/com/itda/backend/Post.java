@@ -7,8 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Data
 @Table(name = "Post")
 @Entity
@@ -16,37 +21,21 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false,length = 30)
-    public String title;
+    private String title;
 
     @Column(nullable = false,length = 100)
-    public String contents;
+    private String contents;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(nullable = true,length = 150)
+    private String test;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // @OneToOne
+    // @JoinColumn(name = "location_id")
+    // private Location location;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
 
 }
 

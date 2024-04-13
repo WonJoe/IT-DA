@@ -5,7 +5,7 @@ const List = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8081/post')
+    fetch('http://localhost:8080/post')
       .then((res) => res.json())
       .then((res) => {
         setPosts(res);

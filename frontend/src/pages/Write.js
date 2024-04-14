@@ -13,7 +13,7 @@ const Write = (props) => {
 
   const submitPost = (e) => {
     e.preventDefault();
-    fetch('http://localhost:8081/post', {
+    fetch('http://localhost:8080/post', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset-utf-8',

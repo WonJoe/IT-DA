@@ -10,6 +10,7 @@ const Header = () => {
           <Nav className="me-auto"> 
             <Link to ="/" className="nav-link">홈</Link> 
             <Link to ="/write" className="nav-link">글쓰기</Link>
+            <Link to ="/test" className="nav-link">지도</Link>
           </Nav> 
         </Container> 
       </Navbar> 

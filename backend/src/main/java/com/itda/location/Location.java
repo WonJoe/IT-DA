@@ -1,12 +1,14 @@
 package com.itda.location;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -25,24 +27,31 @@ public class Location {
     private Long id;
 
     @Column(nullable = false)
-    private float lat;
+    private double lat;
 
     @Column(nullable = false)
-    private float lng;
+    private double lng;
 
-    @Column(nullable = false)
-    private float adjustedLat;
+    @Column(nullable = true)
+    private double adjustedLat;
 
-    @Column(nullable = false)
-    private float adjustedLng;
+    @Column(nullable = true)
+    private double adjustedLng;
+    
+    // @Column(nullable = false)
+    // private Timestamp createdLocationTime = getRoundedTimestamp();
 
     @Column(nullable = false)
     private Timestamp createdLocationTime;
-
-    // Post 엔티티와의 일대일 관계를 설정합니다.
-    // @OneToOne(mappedBy = "location")
-    // private Post post;
-
     
+    @Column(nullable = false)
+    private String address;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdLocationTime = new Timestamp(System.currentTimeMillis());
+    }
     
 }
+
+

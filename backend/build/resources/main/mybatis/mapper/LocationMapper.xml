@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itda.mapper.LocationMapper">
+
+<select id="maxNum" resultType="int">
+	select nvl(max(id),0) from Location
+</select>
+
+<insert id="insertData" parameterType="com.itda.dto.LocationDTO">
+	insert into Location (id,address,lat,lng,adjustedLat,adjustedLng,createLocationTime)
+	values (#{id},#{address},#{lat},#{lng},#{adjustedLat},#{adjustedLng},sysdate)
+
+</insert>
+
+<select id="getDataCount" parameterType="map" resultType="int">
+	select nvl(count(*),0) from Location
+	where ${searchKey} like '%' || #{searchValue} || '%'
+</select>
+
+<select id="getList" parameterType="map" resultType="com.itda.dto.LocationDTO">
+	select * from (
+	select rownum rnum,data.* from (
+	select id,address,adjustedLat,to_char(created,'YYYY-MM-DD') created from Location
+	where ${searchKey} like '%' || #{searchValue} || '%'
+	order by id desc) data)
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+
+</select>
+
+<update id="updateHitCount" parameterType="int">
+	update Location set hitCount=hitCount+1 where id=#{id}
+</update>
+
+<select id="getReadData" parameterType="int" resultType="com.itda.dto.LocationDTO">
+	select id,address,lat,lng,adjustedLat,adjustedLng,
+	created from Location where id=#{id}
+</select>
+
+<update id="updateData" parameterType="com.itda.dto.LocationDTO">
+	update Location set address=#{address},lat=#{lat},lng=#{lng},
+	adjustedLat=#{adjustedLat},adjustedLng=#{adjustedLng} where id=#{id}
+</update>
+
+<delete id="deleteData" parameterType="int">
+	delete Location where id=#{id}
+</delete>
+
+<select id="getMatchingDistance" parameterType="long" resultType="com.itda.dto.LocationDTO">
+	SELECT ID,ADDRESS,ADJUSTED_LAT,ADJUSTED_LNG,CREATED_LOCATION_TIME,LAT,LNG,CEIL(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113, 2))) as distance FROM location
+	WHERE id != #{id}
+	ORDER BY SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113000, 2)) asc
+</select>
+
+</mapper>

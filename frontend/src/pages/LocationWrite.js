@@ -17,15 +17,144 @@ const LocationWrite = (props) => {
         let itwillLat = 37.498682;
         let itwillLng = 127.031897;
 
+        let infowindow
+
+        function createCenterControl() {
+            const controlButton = document.createElement("button");
+          
+            // Set CSS for the control.
+            controlButton.style.backgroundColor = "#cc99cc";
+            controlButton.style.border = "2px solid #fff";
+            controlButton.style.borderRadius = "3px";
+            controlButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+            controlButton.style.color = "#ffffff";
+            controlButton.style.cursor = "pointer";
+            controlButton.style.fontFamily = "Roboto,Arial,sans-serif";
+            controlButton.style.fontSize = "16px";
+            controlButton.style.lineHeight = "38px";
+            controlButton.style.margin = "8px 0 22px";
+            controlButton.style.padding = "0 5px";
+            controlButton.style.textAlign = "center";
+            controlButton.textContent = "주소 등록하기";
+            controlButton.title = "위치 보내기";
+            controlButton.type = "button";
+            controlButton.addEventListener("click", () => {
+
+                const postData = {
+                    address: address,
+                    lat: lat,
+                    lng: lng
+                };
+        
+                fetch('http://localhost:8080/test', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json; charset-utf-8',
+                  },
+                  body: JSON.stringify(postData),
+                })
+                  .then((res) => res.json())
+                  .then((res) => console.log(res), props.history.push('/testlist'));
+
+            });
+            return controlButton;
+          }
+
         function initMap() {
 
             if (window.google && window.google.maps) {
                 map = new window.google.maps.Map(document.getElementById("map"), {
                     center: { lat: itwillLat, lng: itwillLng },
                     zoom: 17,
+                    zoomControl: true,
+                    mapTypeControl: false,
+                    scaleControl: true,
+                    streetViewControl: false,
+                    rotateControl: false,
+                    fullscreenControl: true,
                     styles: mapStyle.styles
                 });
-    
+
+                let contentStrings =
+                '<div id="content">' +
+                '<h3 id="firstHeading" class="firstHeading">내 위치로 이동했습니다.</h3>' +
+                '<div id="bodyContent">' +
+                "<p><b>정확한 주소를 선택해 주세요.</b></p>" +
+                "</div>" +
+                "</div>";
+
+                let infoWindow = new window.google.maps.InfoWindow({});
+
+                // -----------------------(중하단 버튼)--------------------------------
+                const centerControlDiv = document.createElement("div");
+                const centerControl = createCenterControl();
+                centerControlDiv.appendChild(centerControl);
+                map.controls[window.google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
+                // -------------------------------------------------------
+                // -----------------------(중상단 버튼)--------------------------------
+                // infoWindow = new google.maps.InfoWindow();
+
+                const locationButton = document.createElement("button");
+
+                locationButton.textContent = "내 위치 찾기";
+                locationButton.classList.add("custom-map-control-button");
+                locationButton.style.backgroundColor = "#cc99cc";
+                locationButton.style.border = "2px solid #fff";
+                locationButton.style.borderRadius = "3px";
+                locationButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+                locationButton.style.color = "#ffffff";
+                locationButton.style.cursor = "pointer";
+                locationButton.style.fontFamily = "Roboto,Arial,sans-serif";
+                locationButton.style.fontSize = "16px";
+                locationButton.style.lineHeight = "38px";
+                locationButton.style.margin = "8px 0 22px";
+                locationButton.style.padding = "0 5px";
+                locationButton.style.textAlign = "center";
+                locationButton.title = "위치 찾기";
+                locationButton.type = "button";
+                map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+                locationButton.addEventListener("click", () => {
+
+                    
+
+                    if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+
+
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent(contentStrings);
+                        infoWindow.open(map);
+                        map.setCenter(pos);
+                        },
+                        () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                        }
+                    );
+                    } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, infoWindow, map.getCenter());
+                    }
+                })
+                
+
+                function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.close();
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(
+                    browserHasGeolocation
+                    ? "Error: The Geolocation service failed."
+                    : "Error: Your browser doesn't support geolocation."
+                );
+                infoWindow.open(map);
+                
+                }
+                // -------------------------------------------------------
+
                 let location = {
                     lat: itwillLat,
                     lng: itwillLng
@@ -49,7 +178,7 @@ const LocationWrite = (props) => {
                 navigator.geolocation.getCurrentPosition((position) => {
                     clearTimeout(geolocationTimeout);
                     initMapWithLocation(position);
-                }, (error) => {
+                    }, (error) => {
                     clearTimeout(geolocationTimeout);
                     console.error("사용자 위치를 가져오는데 실패했습니다:", error);
                     alert("사용자 위치를 가져오는 데 실패했습니다.");
@@ -99,8 +228,6 @@ const LocationWrite = (props) => {
                                 address = '정확한 주소를 선택해 주세요.';
                             }
                         }
-
-                        updateInfo();
                     } else {
                         alert("주소를 찾을 수 없습니다.");
                     }
@@ -113,53 +240,21 @@ const LocationWrite = (props) => {
 
         function placeMarker(location, map) {
 
+            
+
             let contentString =
                 '<div id="content">' +
-                '<div id="siteNotice">' +
-                "</div>" +
                 '<h3 id="firstHeading" class="firstHeading">이 주소가 맞나요?</h3>' +
                 '<div id="bodyContent">' +
-                "<p><div id='info'></div></p>" +
                 "<p><b>이 주소가 아니라면 지도를 클릭하거나 마커를 드래그 해주세요.</b></p>" +
-                '<button id="getLocationButton">내 위치 찾기</button><button id="getTestButton">맞습니다</button>' +
                 "</div>" +
                 "</div>";
 
-                // const contentElement = document.createElement('div');
-                // contentElement.innerHTML = contentString;
-                
-                // // 버튼 클릭 이벤트 핸들러 추가
-                // const getLocationButton = contentElement.querySelector('#getLocationButton');
-                // const getTestButton = contentElement.querySelector('#getTestButton');
-                
-                // getLocationButton.addEventListener('click', () => {
-                //     // 내 위치 찾기 버튼이 클릭되었을 때 수행할 작업
-                //     getLocation();
-                // });
-                
-                // getTestButton.addEventListener('click', () => {
-                //     // 맞습니다 버튼이 클릭되었을 때 수행할 작업
-                //     submitPost();
-                // });
 
-            let infowindow = new window.google.maps.InfoWindow({
+            infowindow = new window.google.maps.InfoWindow({
                 content: contentString
-              });
-
-              infowindow.addListener('domready', () => {
-                const getLocationButton = document.getElementById('getLocationButton');
-                const getTestButton = document.getElementById('getTestButton');
-            
-                // 내 위치 찾기 버튼 클릭 이벤트 리스너
-                getLocationButton.addEventListener('click', () => {
-                    getLocation();
-                });
-            
-                // 맞습니다 버튼 클릭 이벤트 리스너
-                getTestButton.addEventListener('click', () => {
-                    submitPost();
-                });
             });
+
 
             if (marker) {
                 marker.setMap(null);
@@ -171,10 +266,7 @@ const LocationWrite = (props) => {
                 draggable: true
             });
 
-            infowindow.open({
-                anchor: marker,
-                map,
-              });
+            
 
             map.panTo(location);
 
@@ -182,73 +274,64 @@ const LocationWrite = (props) => {
                 marker.setPosition(event.latLng);
                 reverseGeocode(event.latLng);
                 map.panTo(event.latLng);
+                if (infowindow) {
+                    infowindow.close();
+                }
+    
+                infowindow.open({
+                    anchor: marker,
+                    map,
+                });
+                
             });
 
             marker.addListener("dragend", (event) => {
                 marker.setPosition(event.latLng);
                 reverseGeocode(event.latLng);
                 map.panTo(event.latLng);
+                
+                if (infowindow) {
+                    infowindow.close();
+                }
+    
+                infowindow.open({
+                    anchor: marker,
+                    map,
+                });
+
+            });
+
+            if (infowindow) {
+                infowindow.close();
+            }
+
+            infowindow.open({
+                anchor: marker,
+                map,
             });
         }
-
-        
-
-        function updateInfo() {
-            const info = document.getElementById("info");
-            info.innerHTML = address;
-        }
-
-        const handleTestButtonClick = () => {
-            submitPost()
-        };
-
-        
-
-        document.getElementById("getTestButton").addEventListener("click", handleTestButtonClick);
 
         const script = document.createElement("script");
         script.src = `https://maps.googleapis.com/maps/api/js?key=${api.api}`;
         script.async = true;
         script.defer = true;
-        script.onload = initMap;
-        document.body.appendChild(script);
-
-        const handleGetLocationButtonClick = () => {
-            getLocation();
+        script.onload = () => {
+            if (!window.google || !window.google.maps) {
+                console.error("Google Maps API is not loaded.");
+                return;
+            }
+            initMap();
         };
-
-        document.getElementById("getLocationButton").addEventListener("click", handleGetLocationButtonClick);
+        document.body.appendChild(script);
 
         return () => {
             document.body.removeChild(script);
         };
     }, []);
 
-    const submitPost = () => {
-
-        const postData = {
-            address: address,
-            lat: lat,
-            lng: lng
-        };
-
-        fetch('http://localhost:8080/test', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset-utf-8',
-          },
-          body: JSON.stringify(postData),
-        })
-          .then((res) => res.json())
-          .then((res) => console.log(res), props.history.push('/testlist'));
-      };
-
     return (
         <>
-            <button id="getLocationButton">내 위치 찾기</button>
-            <button id="getTestButton">맞습니다</button>
             <div id="map"></div>
-            <div id="info"></div>
         </>
     );
 };

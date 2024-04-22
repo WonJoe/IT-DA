@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itda.users.Users;
+
 @RestController
 public class LocationController {
 
@@ -18,7 +20,8 @@ public class LocationController {
     @CrossOrigin
 	@PostMapping("/test")
 	public ResponseEntity<?> save(@RequestBody Location location) {
-		return new ResponseEntity<>(locationService.save(location), HttpStatus.CREATED);
+		Users users = new Users();
+		return new ResponseEntity<>(locationService.save(users,location), HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
@@ -38,9 +41,9 @@ public class LocationController {
 
 		// long longValue = location.getId();
 		// int id = (int)longValue;
-		long id = location.getId();
+		Long user_no = location.getUserNo();
 
-		ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getMatchingDistance(id), HttpStatus.OK);
+		ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getMatchingDistance(user_no), HttpStatus.OK);
 
 		return testentity;
 	}

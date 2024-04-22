@@ -25,6 +25,6 @@ public interface LocationMapper {
 	
 	public void deleteData(int num) throws Exception;
 
-	public List<LocationDTO> getMatchingDistance(long num) throws Exception;
+	public List<LocationDTO> getMatchingDistance(Long user_no) throws Exception;
 
 }

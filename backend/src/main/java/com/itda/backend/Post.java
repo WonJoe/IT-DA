@@ -32,10 +32,5 @@ public class Post {
     @Column(nullable = true,length = 150)
     private String test;
 
-    // @OneToOne
-    // @JoinColumn(name = "location_id")
-    // private Location location;
-
-
 }
 

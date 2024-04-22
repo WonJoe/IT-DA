@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import address from '../API_KEY'
 
 const Write = (props) => {
   const [post, setPost] = useState();
@@ -13,7 +14,7 @@ const Write = (props) => {
 
   const submitPost = (e) => {
     e.preventDefault();
-    fetch('http://localhost:8080/post', {
+    fetch(`${address.backendaddress}/post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset-utf-8',

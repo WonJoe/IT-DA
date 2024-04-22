@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import address from '../API_KEY'
 
 const DistanceReq = (props) => {
 
@@ -10,11 +11,11 @@ const DistanceReq = (props) => {
     const [num,setNum] = useState(0)
 
     useEffect(()=>{
-        axios.post('http://localhost:8080/testonelist', { id: valueId }, {
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  })
+        axios.post(`${address.backendaddress}/testonelist`, { id: valueId }, {
+            headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            },
+        })
         .then(res=>{
             console.log(res)
             setData(res.data)
@@ -32,32 +33,27 @@ const DistanceReq = (props) => {
         setNum(valueId)
     }
 
-  return (
-    <div>
-            <input type='text' value={valueId} onChange={evt => setValueId(evt.target.value)}/>
+    return (
+        <div style={{ width: '100%' }}>
+            <input width={500} type='text' value={valueId} onChange={evt => setValueId(evt.target.value)}/>
             <button onClick={search}>검색</button>
-            <h4>
-                {
-                    data && loading ? <h2>로딩중...</h2>
-                    :
-                        
-                        <div>
-                            {data.map((item, index) => (
-                                <div key={index}  style={{borderWidth: 2, borderStyle: 'solid'}}>
-                                    아이디 : {item.id}<br/>
-                                    주소 : {item.address}<br/>
-                                    거리 : {item.distance}Km 떨어짐<br/>
-                                </div>
-                            ))}
-                        </div>
-
-                }
-                <p>
-                    {error ? error : null}
-                </p>
-            </h4>
+            <div>
+                {loading ? <h4>로딩중...</h4> : (
+                    <div>
+                        {data.map((item, index) => (
+                            <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
+                                <p>아이디: {item.id}</p>
+                                <p>주소: {item.address}</p>
+                                <p>거리: {item.distance}Km 떨어짐</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            <p>{error}</p>
         </div>
-  );
+    );
+    
 };
 
 export default DistanceReq;

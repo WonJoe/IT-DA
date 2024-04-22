@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itda.dto.LocationDTO;
 import com.itda.mapper.LocationMapper;
+import com.itda.users.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,9 @@ public class LocationService {
     private LocationMapper locationMapper;
 
     @Transactional
-    public Location save(Location location){
+    public Location save(Users users,Location location){
+
+        Long user_no = users.getUserNo();
 
         Double ADJUSTED_LNG = location.getLng();
         Double ADJUSTED_LAT = location.getLat();
@@ -60,6 +63,7 @@ public class LocationService {
 
         location.setAdjustedLat(ADJUSTED_LAT);
         location.setAdjustedLng(ADJUSTED_LNG);
+        location.setUserNo(user_no);
 
         return locationRepository.save(location);
     }
@@ -102,8 +106,8 @@ public class LocationService {
         locationMapper.deleteData(num);
     }
 
-    public List<LocationDTO> getMatchingDistance(long num) throws Exception{
-        return locationMapper.getMatchingDistance(num);
+    public List<LocationDTO> getMatchingDistance(Long user_no) throws Exception{
+        return locationMapper.getMatchingDistance(user_no);
     }
 
 }

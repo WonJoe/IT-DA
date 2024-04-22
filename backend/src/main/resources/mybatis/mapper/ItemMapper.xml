@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itda.mapper.ItemMapper">
+
+<update id="use" parameterType="com.itda.dto.ItemDTO">
+	UPDATE Item
+    SET dia = dia - #{dia}, pinn = pinn - #{pinn}
+    WHERE id = #{id}
+</update>
+
+<update id="charge" parameterType="com.itda.dto.ItemDTO">
+	UPDATE Item
+    SET dia = dia + #{dia}, pinn = pinn + #{pinn}
+    WHERE id = #{id}
+</update>
+
+<select id="maxNum" resultType="int">
+	select nvl(max(id),0) from Item
+</select>
+
+<insert id="insertData" parameterType="com.itda.dto.ItemDTO">
+	insert into Item (id,address,lat,lng,adjustedLat,adjustedLng,createItemTime)
+	values (#{id},#{address},#{lat},#{lng},#{adjustedLat},#{adjustedLng},sysdate)
+
+</insert>
+
+<select id="getDataCount" parameterType="map" resultType="int">
+	select nvl(count(*),0) from Item
+	where ${searchKey} like '%' || #{searchValue} || '%'
+</select>
+
+<select id="getList" parameterType="map" resultType="com.itda.dto.ItemDTO">
+	select * from (
+	select rownum rnum,data.* from (
+	select id,address,adjustedLat,to_char(created,'YYYY-MM-DD') created from Item
+	where ${searchKey} like '%' || #{searchValue} || '%'
+	order by id desc) data)
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+
+</select>
+
+<update id="updateHitCount" parameterType="int">
+	update Item set hitCount=hitCount+1 where id=#{id}
+</update>
+
+<select id="getReadData" parameterType="int" resultType="com.itda.dto.ItemDTO">
+	select id,address,lat,lng,adjustedLat,adjustedLng,
+	created from Item where id=#{id}
+</select>
+
+
+
+<delete id="deleteData" parameterType="int">
+	delete Item where id=#{id}
+</delete>
+
+
+</mapper>

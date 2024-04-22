@@ -6,6 +6,7 @@ import Write from "./pages/Write";
 import Test from "./pages/LocationWrite";
 import Listtest from "./pages/ListLocation";
 import DistanceReq from "./pages/DistanceReq";
+import CreateUser from "./pages/CreateUser";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/test" exact component={Test}/>
         <Route path="/testlist" exact component={Listtest}/>
         <Route path="/distanceReq" exact component={DistanceReq}/>
+        <Route path="/createUser" exact component={CreateUser}/>
       </Container>
     </div>
   );

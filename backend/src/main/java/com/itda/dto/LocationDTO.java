@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class LocationDTO {
-    
-    private long ID;
+
+    private Long user_no;
     private String ADDRESS;
     private String ADJUSTED_LAT;
     private String ADJUSTED_LNG;

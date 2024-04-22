@@ -18,6 +18,7 @@ const LocationWrite = (props) => {
         let itwillLng = 127.031897;
 
         let infowindow
+        let infoWindowLoc
 
         function createCenterControl() {
             const controlButton = document.createElement("button");
@@ -46,7 +47,7 @@ const LocationWrite = (props) => {
                     lng: lng
                 };
         
-                fetch('http://localhost:8080/test', {
+                fetch(`${api.backendaddress}/test`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json; charset-utf-8',
@@ -55,6 +56,9 @@ const LocationWrite = (props) => {
                 })
                   .then((res) => res.json())
                   .then((res) => console.log(res), props.history.push('/testlist'));
+
+                //   window.google.maps.event.clearInstanceListeners(marker);
+                //   window.google.maps.event.clearListeners(marker, 'click');
 
             });
             return controlButton;
@@ -83,7 +87,7 @@ const LocationWrite = (props) => {
                 "</div>" +
                 "</div>";
 
-                let infoWindow = new window.google.maps.InfoWindow({});
+                infoWindowLoc = new window.google.maps.InfoWindow({});
 
                 // -----------------------(중하단 버튼)--------------------------------
                 const centerControlDiv = document.createElement("div");
@@ -113,6 +117,7 @@ const LocationWrite = (props) => {
                 locationButton.title = "위치 찾기";
                 locationButton.type = "button";
                 map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+                
                 locationButton.addEventListener("click", () => {
 
                     
@@ -125,32 +130,35 @@ const LocationWrite = (props) => {
                             lng: position.coords.longitude,
                         };
 
-
-                        infoWindow.setPosition(pos);
-                        infoWindow.setContent(contentStrings);
-                        infoWindow.open(map);
+                        infoWindowLoc.setPosition(pos);
+                        infoWindowLoc.setContent(contentStrings);
+                        infoWindowLoc.open(map);
                         map.setCenter(pos);
                         },
                         () => {
-                        handleLocationError(true, infoWindow, map.getCenter());
+                        handleLocationError(true, infoWindowLoc, map.getCenter());
                         }
                     );
                     } else {
                     // Browser doesn't support Geolocation
-                    handleLocationError(false, infoWindow, map.getCenter());
+                    handleLocationError(false, infoWindowLoc, map.getCenter());
                     }
+
+                
+
+
                 })
                 
 
-                function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.close();
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(
+                function handleLocationError(browserHasGeolocation, infoWindowLoc, pos) {
+                    infoWindowLoc.close();
+                    infoWindowLoc.setPosition(pos);
+                    infoWindowLoc.setContent(
                     browserHasGeolocation
                     ? "Error: The Geolocation service failed."
                     : "Error: Your browser doesn't support geolocation."
                 );
-                infoWindow.open(map);
+                infoWindowLoc.open(map);
                 
                 }
                 // -------------------------------------------------------
@@ -277,11 +285,16 @@ const LocationWrite = (props) => {
                 if (infowindow) {
                     infowindow.close();
                 }
+                if (infoWindowLoc) {
+                    infoWindowLoc.close();
+                }
     
                 infowindow.open({
                     anchor: marker,
                     map,
                 });
+                // window.google.maps.event.clearInstanceListeners(marker);
+                // window.google.maps.event.clearListeners(marker, 'click');
                 
             });
 

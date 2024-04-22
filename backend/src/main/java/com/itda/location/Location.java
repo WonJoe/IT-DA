@@ -1,12 +1,9 @@
 package com.itda.location;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -23,13 +20,13 @@ import lombok.Setter;
 public class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "user_no")
+    private Long userNo;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double lat;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double lng;
 
     @Column(nullable = true)
@@ -37,14 +34,11 @@ public class Location {
 
     @Column(nullable = true)
     private double adjustedLng;
-    
-    // @Column(nullable = false)
-    // private Timestamp createdLocationTime = getRoundedTimestamp();
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Timestamp createdLocationTime;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
     @PrePersist

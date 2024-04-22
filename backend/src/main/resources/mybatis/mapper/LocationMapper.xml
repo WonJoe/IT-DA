@@ -50,10 +50,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	delete Location where id=#{id}
 </delete>
 
-<select id="getMatchingDistance" parameterType="long" resultType="com.itda.dto.LocationDTO">
-	SELECT ID,ADDRESS,ADJUSTED_LAT,ADJUSTED_LNG,CREATED_LOCATION_TIME,LAT,LNG,CEIL(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113, 2))) as distance FROM location
-	WHERE id != #{id}
-	ORDER BY SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113000, 2)) asc
+<select id="getMatchingDistance" parameterType="Long" resultType="com.itda.dto.LocationDTO">
+	SELECT 
+    ID,
+    ADDRESS,
+    ADJUSTED_LAT,
+    ADJUSTED_LNG,
+    CREATED_LOCATION_TIME,
+    LAT,
+    LNG,
+	ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113, 2))) as distance 
+	FROM 
+		location
+	WHERE 
+		id != #{id}
+	ORDER BY 
+		SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113000, 2)) asc
 </select>
 
 </mapper>

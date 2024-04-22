@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import TestItem from '../components/TestItem';
+import address from '../API_KEY'
 
 const List = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/testlist')
+    fetch(`${address.backendaddress}/testlist`)
       .then((res) => res.json())
       .then((res) => {
         setPosts(res);

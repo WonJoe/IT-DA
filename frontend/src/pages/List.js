@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PostItem from '../components/PostItem';
+import address from '../API_KEY'
 
 const List = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/post')
+    fetch(`${address.backendaddress}/post`)
       .then((res) => res.json())
       .then((res) => {
         setPosts(res);

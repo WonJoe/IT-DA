@@ -11,7 +11,7 @@ const DistanceReq = (props) => {
     const [num,setNum] = useState(0)
 
     useEffect(()=>{
-        axios.post(`${address.backendaddress}/testonelist`, { id: valueId }, {
+        axios.post(`${address.backendaddress}/testonelist`, { userNo: valueId }, {
             headers: {
             'Content-Type': 'application/json; charset=utf-8',
             },
@@ -42,7 +42,7 @@ const DistanceReq = (props) => {
                     <div>
                         {data.map((item, index) => (
                             <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
-                                <p>아이디: {item.id}</p>
+                                <p>아이디: {item.userNo}</p>
                                 <p>주소: {item.address}</p>
                                 <p>거리: {item.distance}Km 떨어짐</p>
                             </div>

@@ -26,7 +26,7 @@ public class LocationService {
     @Transactional
     public Location save(Users users,Location location){
 
-        Long user_no = users.getUserNo();
+        Long userNo = users.getUserNo();
 
         Double ADJUSTED_LNG = location.getLng();
         Double ADJUSTED_LAT = location.getLat();
@@ -63,7 +63,7 @@ public class LocationService {
 
         location.setAdjustedLat(ADJUSTED_LAT);
         location.setAdjustedLng(ADJUSTED_LNG);
-        location.setUserNo(user_no);
+        location.setUserNo(userNo);
 
         return locationRepository.save(location);
     }
@@ -106,8 +106,8 @@ public class LocationService {
         locationMapper.deleteData(num);
     }
 
-    public List<LocationDTO> getMatchingDistance(Long user_no) throws Exception{
-        return locationMapper.getMatchingDistance(user_no);
+    public List<LocationDTO> getMatchingDistance(Long userNo) throws Exception{
+        return locationMapper.getMatchingDistance(userNo);
     }
 
 }

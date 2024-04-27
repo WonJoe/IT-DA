@@ -22,7 +22,7 @@ public class ItemController {
 
         ItemDTO itemDTO = new ItemDTO();
 
-        itemDTO.setUser_no(item.getUserNo());
+        itemDTO.setUserNo(item.getUserNo());
         itemDTO.setDia(item.getDia());
         itemDTO.setPinn(item.getPinn());
 

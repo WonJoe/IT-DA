@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class LocationDTO {
 
-    private Long user_no;
+    private Long userNo;
     private String ADDRESS;
     private String ADJUSTED_LAT;
     private String ADJUSTED_LNG;

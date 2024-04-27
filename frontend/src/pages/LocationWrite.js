@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import './LocationWrite.css';
 import api from '../API_KEY';
 import mapStyle from '../mapStyle';
 
-const LocationWrite = (props) => {
+const LocationWrite = ({ setCreateData }) => {
 
-    let address;
-    let lat;
-    let lng;
+    const [address, setAddress] = useState('');
+    const [lat, setLat] = useState('');
+    const [lng, setLng] = useState('');
     
     useEffect(() => {
 
@@ -36,31 +36,10 @@ const LocationWrite = (props) => {
             controlButton.style.margin = "8px 0 22px";
             controlButton.style.padding = "0 5px";
             controlButton.style.textAlign = "center";
-            controlButton.textContent = "주소 등록하기";
+            controlButton.textContent = "주소 선택 완료";
             controlButton.title = "위치 보내기";
             controlButton.type = "button";
-            controlButton.addEventListener("click", () => {
-
-                const postData = {
-                    address: address,
-                    lat: lat,
-                    lng: lng
-                };
-        
-                fetch(`${api.backendaddress}/test`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json; charset-utf-8',
-                  },
-                  body: JSON.stringify(postData),
-                })
-                  .then((res) => res.json())
-                  .then((res) => console.log(res), props.history.push('/testlist'));
-
-                //   window.google.maps.event.clearInstanceListeners(marker);
-                //   window.google.maps.event.clearListeners(marker, 'click');
-
-            });
+            controlButton.addEventListener("click", handleAddressSelect);
             return controlButton;
           }
 
@@ -223,19 +202,32 @@ const LocationWrite = (props) => {
                 if (status === "OK") {
                     if (results[0]) {
                         for (let i = 0; i < results.length; i++) {
-                            if (results[i].types.includes('sublocality_level_2')) {
-                                console.log("Sublocality level 2 address: " + results[i].formatted_address);
-                                address = results[i].formatted_address;
-                                console.log(address)
-                                    lat = location.lat()
-                                    lng = location.lng()
-                                    console.log(lat)
-                                    console.log(lng)
+                            if (results[i].types.includes('sublocality_level_4')) {
+                                    console.log("Sublocality level 4 address: " + results[i].formatted_address);
+                                    if(results[i].formatted_address){
+                                        setAddress(results[i].formatted_address);
+                                        setLat(location.lat());
+                                        setLng(location.lng());
+                                        console.log(results[i].formatted_address)
+                                        console.log(location.lat())
+                                        console.log(location.lng())
+                                        break;
+                                    }else{
+                                        console.log("테스트" + results[i].formatted_address)
+                                        console.log("테스트" + location.lat())
+                                        console.log("테스트" + location.lng())
+                                        setAddress("테스트");
+                                        setLat(location.lat());
+                                        setLng(location.lng());
+                                    }
                                 break;
                             } else {
-                                address = '정확한 주소를 선택해 주세요.';
+                                // address = '정확한 주소를 선택해 주세요.';
+                                setAddress('정확한 주소를 선택해 주세요.');
                             }
                         }
+
+                        
                     } else {
                         alert("주소를 찾을 수 없습니다.");
                     }
@@ -337,14 +329,29 @@ const LocationWrite = (props) => {
         };
         document.body.appendChild(script);
 
+        
+
         return () => {
             document.body.removeChild(script);
         };
     }, []);
 
+    const handleAddressSelect = () => {
+        setCreateData((prevData) => ({
+          ...prevData,
+          location: {
+            ...prevData.location,
+            lat: lat,
+            lng: lng,
+            address: address
+          },
+        }));
+      };
+
     return (
         <>
             <div id="map"></div>
+            <button onClick={handleAddressSelect}>주소 선택 완료</button>
         </>
     );
 };

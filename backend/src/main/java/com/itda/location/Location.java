@@ -41,6 +41,7 @@ public class Location {
     @Column(nullable = true)
     private String address;
 
+    //로컬타임 가져오기
     @PrePersist
     public void prePersist() {
         this.createdLocationTime = new Timestamp(System.currentTimeMillis());

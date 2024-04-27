@@ -17,7 +17,7 @@ const List = () => {
   return (
     <div>
       {posts.map((post) => (
-        <TestItem key={post.id} post={post} />
+        <TestItem key={post.userNo} post={post} />
       ))}
     </div>
   );

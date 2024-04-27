@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.itda.mapper.LocationMapper">
 
-<select id="maxNum" resultType="int">
+<!-- <select id="maxNum" resultType="int">
 	select nvl(max(id),0) from Location
 </select>
 
@@ -48,24 +48,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <delete id="deleteData" parameterType="int">
 	delete Location where id=#{id}
-</delete>
+</delete> -->
 
 <select id="getMatchingDistance" parameterType="Long" resultType="com.itda.dto.LocationDTO">
 	SELECT 
-    ID,
+    USER_NO as userNo,
     ADDRESS,
     ADJUSTED_LAT,
     ADJUSTED_LNG,
     CREATED_LOCATION_TIME,
     LAT,
     LNG,
-	ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113, 2))) as distance 
+	ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113, 2))) as distance 
 	FROM 
 		location
 	WHERE 
-		id != #{id}
+		USER_NO != #{userNo}
 	ORDER BY 
-		SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE id = #{id}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE id = #{id}) - ADJUSTED_LNG) * 113000, 2)) asc
+		SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113000, 2)) asc
+
 </select>
 
 </mapper>

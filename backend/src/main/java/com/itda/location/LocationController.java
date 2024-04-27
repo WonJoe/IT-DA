@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itda.dto.ItemDTO;
+import com.itda.item.ItemService;
 import com.itda.users.Users;
 
 @RestController
@@ -16,6 +18,9 @@ public class LocationController {
 
 	@Autowired
 	private LocationService locationService;
+
+	@Autowired
+	private ItemService itemService;
     
     @CrossOrigin
 	@PostMapping("/test")
@@ -37,13 +42,20 @@ public class LocationController {
 	@PostMapping("/testonelist")
 	public ResponseEntity<?> matching(@RequestBody Location location) throws Exception {
 
-		// String Strgingid = location.getId();
+		Long userNo = location.getUserNo();
 
-		// long longValue = location.getId();
-		// int id = (int)longValue;
-		Long user_no = location.getUserNo();
+		ItemDTO itemDTO = new ItemDTO();
 
-		ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getMatchingDistance(user_no), HttpStatus.OK);
+		itemDTO.setUserNo(userNo);
+		//여기서 한번 찾을때마다 쓸 다이아 갯수 설정
+		int usePinnSearch = 30;
+		itemDTO.setPinn(usePinnSearch);
+		itemDTO.setDia(0);
+
+
+		itemService.use(itemDTO);
+
+		ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getMatchingDistance(userNo), HttpStatus.OK);
 
 		return testentity;
 	}

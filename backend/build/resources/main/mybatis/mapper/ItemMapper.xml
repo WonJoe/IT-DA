@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <update id="use" parameterType="com.itda.dto.ItemDTO">
 	UPDATE Item
     SET dia = dia - #{dia}, pinn = pinn - #{pinn}
-    WHERE id = #{id}
+    WHERE USER_NO = #{userNo}
 </update>
 
 <update id="charge" parameterType="com.itda.dto.ItemDTO">

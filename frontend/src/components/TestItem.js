@@ -12,7 +12,7 @@ const PostItem = ({post}) => {
   return (
     <Card>
       <Card.Body>
-        <Card.Title>{post.id}</Card.Title>
+        <Card.Title>{post.userNo}</Card.Title>
         <Card.Text>{post.address}</Card.Text>
         <Card.Text>{formattedTime}</Card.Text>
         <Card.Text>{post.createdLocationTime}</Card.Text>

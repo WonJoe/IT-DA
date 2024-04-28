@@ -38,6 +38,8 @@ public class LocationController {
 		return testentity;
 	}
 
+
+	//매칭
 	@CrossOrigin
 	@PostMapping("/testonelist")
 	public ResponseEntity<?> matching(@RequestBody Location location) throws Exception {
@@ -47,25 +49,16 @@ public class LocationController {
 		ItemDTO itemDTO = new ItemDTO();
 
 		itemDTO.setUserNo(userNo);
-		//여기서 한번 찾을때마다 쓸 다이아 갯수 설정
+		//여기서 한번 찾을때마다 쓸 핀 갯수 설정
 		int usePinnSearch = 30;
 		itemDTO.setPinn(usePinnSearch);
 		itemDTO.setDia(0);
-
-
+		//핀 사용하는 서비스
 		itemService.use(itemDTO);
 
 		ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getMatchingDistance(userNo), HttpStatus.OK);
 
 		return testentity;
 	}
-
-	// @CrossOrigin
-    // @GetMapping("/testonelist")
-    // public ResponseEntity<?> getAllLocations() {
-    //     ResponseEntity<?> testentity = new ResponseEntity<>(locationService.getAllLocations(), HttpStatus.OK);
-    //     return testentity;
-    // }
-
 
 }

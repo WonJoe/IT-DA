@@ -1,5 +1,6 @@
 package com.itda.location;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itda.dto.LocationDTO;
+import com.itda.dto.LocationSelectedDTO;
 import com.itda.mapper.LocationMapper;
 import com.itda.users.Users;
 
@@ -23,6 +25,7 @@ public class LocationService {
     @Autowired
     private LocationMapper locationMapper;
 
+    //위치를 받아오면 보정해서 저장하는 서비스
     @Transactional
     public Location save(Users users,Location location){
 
@@ -74,40 +77,68 @@ public class LocationService {
     }
 
     
-    public int maxNum() throws Exception{
-        return locationMapper.maxNum();
-    }
+    // public int maxNum() throws Exception{
+    //     return locationMapper.maxNum();
+    // }
 	
-	public void insertData(LocationDTO dto) throws Exception{
-        locationMapper.insertData(dto);
-    }
+	// public void insertData(LocationDTO dto) throws Exception{
+    //     locationMapper.insertData(dto);
+    // }
 	
-	public int getDataCount(String searchKey, String searchValue) throws Exception{
-        return locationMapper.getDataCount(searchKey, searchValue);
-    }
+	// public int getDataCount(String searchKey, String searchValue) throws Exception{
+    //     return locationMapper.getDataCount(searchKey, searchValue);
+    // }
 	
-	public List<LocationDTO> getList(int start, int end, String searchKey, String searchValue) throws Exception{
-        return locationMapper.getList(start, end, searchKey, searchValue);
-    }
+	// public List<LocationDTO> getList(int start, int end, String searchKey, String searchValue) throws Exception{
+    //     return locationMapper.getList(start, end, searchKey, searchValue);
+    // }
 	
-	public LocationDTO getReadData(int num) throws Exception{
-        return locationMapper.getReadData(num);
-    }
+	// public LocationDTO getReadData(int num) throws Exception{
+    //     return locationMapper.getReadData(num);
+    // }
 	
-	public void updateHitCount(int num) throws Exception{
-        locationMapper.updateHitCount(num);
-    }
+	// public void updateHitCount(int num) throws Exception{
+    //     locationMapper.updateHitCount(num);
+    // }
 	
-	public void updateData(LocationDTO dto) throws Exception{
-        locationMapper.updateData(dto);
-    }
+	// public void updateData(LocationDTO dto) throws Exception{
+    //     locationMapper.updateData(dto);
+    // }
 	
-	public void deleteData(int num) throws Exception{
-        locationMapper.deleteData(num);
-    }
+	// public void deleteData(int num) throws Exception{
+    //     locationMapper.deleteData(num);
+    // }
 
+    //userNo를 받아와서 가까운 순으로 조회
     public List<LocationDTO> getMatchingDistance(Long userNo) throws Exception{
-        return locationMapper.getMatchingDistance(userNo);
+
+    List<LocationDTO> matchingDistances = locationMapper.getMatchingDistance(userNo);
+
+    if(matchingDistances.size() >= 4){
+        LocationSelectedDTO dto = new LocationSelectedDTO();
+        dto.setUserNo(userNo);
+        
+        // 모든 matchingDistances에서 userNo를 추출하여 selectedNo로 사용
+        List<Long> selectedNos = new ArrayList<>();
+        for(LocationDTO locationDTO : matchingDistances) {
+            selectedNos.add(locationDTO.getUserNo());
+        }
+
+        // 각 selectedNo를 사용하여 locationMapper를 호출
+        int count = 0;
+        for (Long selectedNo : selectedNos) {
+            dto.setSelected(selectedNo);
+            locationMapper.selected(dto);
+            
+            count++;
+            if (count >= 4) {
+                break; // 4번째 순서까지만 실행 후 루프 중단
+            }
+        }
     }
+    
+    return matchingDistances.size() >= 4 ? matchingDistances.subList(0, 4) : null;
+}
+
 
 }

@@ -11,6 +11,9 @@ const DistanceReq = (props) => {
     const [num,setNum] = useState(0)
 
     useEffect(()=>{
+        if (valueId === null || valueId === '') {
+            return;
+        }
         axios.post(`${address.backendaddress}/testonelist`, { userNo: valueId }, {
             headers: {
             'Content-Type': 'application/json; charset=utf-8',
@@ -26,7 +29,6 @@ const DistanceReq = (props) => {
             setLoading(true)
             setError('데이터를 찾을 수 없습니다.')
         })
-        // axios.request.
     },[num])
 
     const search = () =>{
@@ -40,13 +42,17 @@ const DistanceReq = (props) => {
             <div>
                 {loading ? <h4>로딩중...</h4> : (
                     <div>
-                        {data.map((item, index) => (
-                            <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
-                                <p>아이디: {item.userNo}</p>
-                                <p>주소: {item.address}</p>
-                                <p>거리: {item.distance}Km 떨어짐</p>
-                            </div>
-                        ))}
+                        {data && data.length > 0 ? (
+                            data.map((item, index) => (
+                                <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
+                                    <p>아이디: {item.userNo}</p>
+                                    <p>주소: {item.address}</p>
+                                    <p>거리: {item.distance}Km 떨어짐</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>더 이상 요청할 수 없습니다.</p>
+                        )}
                     </div>
                 )}
             </div>

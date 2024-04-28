@@ -105,7 +105,7 @@ const CreateUser = (props) => {
         )}
         <br/>
 
-        <Form>
+        <Form onSubmit={handleSubmit}>
 
         <Form.Group className="mb-3">
           <Form.Label>위도</Form.Label>

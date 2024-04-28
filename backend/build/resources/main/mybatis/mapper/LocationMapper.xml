@@ -59,14 +59,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     CREATED_LOCATION_TIME,
     LAT,
     LNG,
-	ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113, 2))) as distance 
+	CASE 
+        WHEN ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113, 2))) = 0 THEN 1
+        ELSE ROUND(SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113, 2)))
+    END as distance 
 	FROM 
 		location
 	WHERE 
-		USER_NO != #{userNo}
+		USER_NO != #{userNo} 
+   		AND user_no NOT IN (SELECT selected FROM location_selected WHERE user_no = #{userNo})
 	ORDER BY 
 		SQRT(POWER(((SELECT ADJUSTED_LAT FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LAT) * 91000, 2) + POWER(((SELECT ADJUSTED_LNG FROM LOCATION WHERE USER_NO = #{userNo}) - ADJUSTED_LNG) * 113000, 2)) asc
 
+</select>
+
+<!-- 한번 매칭된거 저장 -->
+<insert id="selected" parameterType="map">
+    INSERT INTO location_selected (id,user_no, selected, created_selected_time)
+    VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM location_selected),#{userNo}, #{selected}, sysdate)
+</insert>
+
+<!-- 매칭된사람들 조회(중복 매칭 방지) -->
+<select id="getMatchingData" parameterType="Long" resultType="com.itda.dto.LocationSelectedDTO">
+	select SELECTED,CREATED_SELECTED_TIME 
+	from location_selected where USER_NO=#{userNo}
 </select>
 
 </mapper>

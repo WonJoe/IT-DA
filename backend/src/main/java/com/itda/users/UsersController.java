@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itda.dto.CreateUserRequest;
 import com.itda.item.ItemService;
 import com.itda.location.Location;
+import com.itda.location.LocationSelectedService;
 import com.itda.location.LocationService;
 
 import javax.servlet.http.HttpSession;
@@ -30,6 +31,9 @@ public class UsersController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private LocationSelectedService locationSelectedService;
 
     @Autowired
     private HttpSession httpSession;
@@ -57,9 +61,10 @@ public class UsersController {
         Users users = request.getUsers();
         Location location = request.getLocation();
         
-        
+        //회원가입하면서 userNo 기반으로 동시에 테이블 생성(회원탈퇴하면 한번에 다 지워야함)
         usersService.save(users);
         itemService.save(users);
+        
 
         return new ResponseEntity<>(locationService.save(users, location), HttpStatus.OK);
     }

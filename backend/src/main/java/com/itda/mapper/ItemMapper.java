@@ -9,4 +9,8 @@ public interface ItemMapper {
     
     public void use(ItemDTO dto) throws Exception;
 
+    public void charge(ItemDTO dto) throws Exception;
+
+    public ItemDTO getReadData(Long userNo) throws Exception;
+
 }

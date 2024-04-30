@@ -5,19 +5,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.itda.mapper.ItemMapper">
 
+<!-- 아이템 사용 -->
 <update id="use" parameterType="com.itda.dto.ItemDTO">
 	UPDATE Item
     SET dia = dia - #{dia}, pinn = pinn - #{pinn}
     WHERE USER_NO = #{userNo}
 </update>
 
+<!-- 아이템 충전 -->
 <update id="charge" parameterType="com.itda.dto.ItemDTO">
 	UPDATE Item
     SET dia = dia + #{dia}, pinn = pinn + #{pinn}
-    WHERE id = #{id}
+    WHERE user_no = #{userNo}
 </update>
 
-<select id="maxNum" resultType="int">
+<!-- 아이템 갯수 조회 -->
+<select id="getReadData" parameterType="Long" resultType="com.itda.dto.ItemDTO">
+	select USER_NO as userNo,DIA as dia,PINN as pinn 
+	from Item where user_no=#{userNo}
+</select>
+
+<!-- <select id="maxNum" resultType="int">
 	select nvl(max(id),0) from Item
 </select>
 
@@ -48,16 +56,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	update Item set hitCount=hitCount+1 where id=#{id}
 </update>
 
-<select id="getReadData" parameterType="int" resultType="com.itda.dto.ItemDTO">
-	select id,address,lat,lng,adjustedLat,adjustedLng,
-	created from Item where id=#{id}
-</select>
+
 
 
 
 <delete id="deleteData" parameterType="int">
 	delete Item where id=#{id}
-</delete>
+</delete> -->
 
 
 </mapper>

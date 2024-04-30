@@ -21,9 +21,22 @@ public class ItemService{
     @Autowired
     private ItemMapper itemMapper;
 
+    //아이템 사용
     @Transactional
     public void use(ItemDTO dto) throws Exception{
         itemMapper.use(dto);
+    }
+
+    //아이템 충전
+    @Transactional
+    public void charge(ItemDTO dto) throws Exception{
+        itemMapper.charge(dto);
+    }
+
+    //아이템 갯수 조회
+    @Transactional
+    public ItemDTO getReadData(Long userNo) throws Exception{
+        return itemMapper.getReadData(userNo);
     }
 
     @Transactional

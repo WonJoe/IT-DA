@@ -28,6 +28,14 @@ public class ItemController {
 
         itemService.use(itemDTO);
     }
+
+    // 테스트 아직 안함
+    @CrossOrigin
+    @PostMapping("/searchItem")
+    public ItemDTO getReadData(@RequestBody Item  item) throws Exception{
+
+        return itemService.getReadData(item.getUserNo());
+    }
     
     
 

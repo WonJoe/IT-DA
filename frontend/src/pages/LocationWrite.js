@@ -3,7 +3,7 @@ import './LocationWrite.css';
 import api from '../API_KEY';
 import mapStyle from '../mapStyle';
 
-const LocationWrite = ({ setCreateData }) => {
+const LocationWrite = ({ setCreateData, toggleLocationWrite }) => {
 
     const [address, setAddress] = useState('');
     const [lat, setLat] = useState('');
@@ -20,28 +20,28 @@ const LocationWrite = ({ setCreateData }) => {
         let infowindow
         let infoWindowLoc
 
-        function createCenterControl() {
-            const controlButton = document.createElement("button");
+        // function createCenterControl() {
+        //     const controlButton = document.createElement("button");
           
-            // Set CSS for the control.
-            controlButton.style.backgroundColor = "#cc99cc";
-            controlButton.style.border = "2px solid #fff";
-            controlButton.style.borderRadius = "3px";
-            controlButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-            controlButton.style.color = "#ffffff";
-            controlButton.style.cursor = "pointer";
-            controlButton.style.fontFamily = "Roboto,Arial,sans-serif";
-            controlButton.style.fontSize = "16px";
-            controlButton.style.lineHeight = "38px";
-            controlButton.style.margin = "8px 0 22px";
-            controlButton.style.padding = "0 5px";
-            controlButton.style.textAlign = "center";
-            controlButton.textContent = "주소 선택 완료";
-            controlButton.title = "위치 보내기";
-            controlButton.type = "button";
-            controlButton.addEventListener("click", handleAddressSelect);
-            return controlButton;
-          }
+        //     // Set CSS for the control.
+        //     controlButton.style.backgroundColor = "#cc99cc";
+        //     controlButton.style.border = "2px solid #fff";
+        //     controlButton.style.borderRadius = "3px";
+        //     controlButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+        //     controlButton.style.color = "#ffffff";
+        //     controlButton.style.cursor = "pointer";
+        //     controlButton.style.fontFamily = "Roboto,Arial,sans-serif";
+        //     controlButton.style.fontSize = "16px";
+        //     controlButton.style.lineHeight = "38px";
+        //     controlButton.style.margin = "8px 0 22px";
+        //     controlButton.style.padding = "0 5px";
+        //     controlButton.style.textAlign = "center";
+        //     controlButton.textContent = "주소 선택 완료";
+        //     controlButton.title = "위치 보내기";
+        //     controlButton.type = "button";
+        //     controlButton.addEventListener("click", handleAddressSelect);
+        //     return controlButton;
+        //   }
 
         function initMap() {
 
@@ -69,13 +69,12 @@ const LocationWrite = ({ setCreateData }) => {
                 infoWindowLoc = new window.google.maps.InfoWindow({});
 
                 // -----------------------(중하단 버튼)--------------------------------
-                const centerControlDiv = document.createElement("div");
-                const centerControl = createCenterControl();
-                centerControlDiv.appendChild(centerControl);
-                map.controls[window.google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
+                // const centerControlDiv = document.createElement("div");
+                // const centerControl = createCenterControl();
+                // centerControlDiv.appendChild(centerControl);
+                // map.controls[window.google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
                 // -------------------------------------------------------
                 // -----------------------(중상단 버튼)--------------------------------
-                // infoWindow = new google.maps.InfoWindow();
 
                 const locationButton = document.createElement("button");
 
@@ -88,8 +87,8 @@ const LocationWrite = ({ setCreateData }) => {
                 locationButton.style.color = "#ffffff";
                 locationButton.style.cursor = "pointer";
                 locationButton.style.fontFamily = "Roboto,Arial,sans-serif";
-                locationButton.style.fontSize = "16px";
-                locationButton.style.lineHeight = "38px";
+                locationButton.style.fontSize = "20px";
+                locationButton.style.lineHeight = "50px";
                 locationButton.style.margin = "8px 0 22px";
                 locationButton.style.padding = "0 5px";
                 locationButton.style.textAlign = "center";
@@ -203,19 +202,22 @@ const LocationWrite = ({ setCreateData }) => {
                     if (results[0]) {
                         for (let i = 0; i < results.length; i++) {
                             if (results[i].types.includes('sublocality_level_4')) {
-                                    console.log("Sublocality level 4 address: " + results[i].formatted_address);
+                                    // console.log("Sublocality level 4 address: " + results[i].formatted_address);
                                     if(results[i].formatted_address){
                                         setAddress(results[i].formatted_address);
+                                        if (results[i].formatted_address !== null) {
+                                            document.getElementById('info').textContent = results[i].formatted_address;
+                                        }
                                         setLat(location.lat());
                                         setLng(location.lng());
                                         console.log(results[i].formatted_address)
-                                        console.log(location.lat())
-                                        console.log(location.lng())
+                                        // console.log(location.lat())
+                                        // console.log(location.lng())
                                         break;
                                     }else{
-                                        console.log("테스트" + results[i].formatted_address)
-                                        console.log("테스트" + location.lat())
-                                        console.log("테스트" + location.lng())
+                                        // console.log("테스트" + results[i].formatted_address)
+                                        // console.log("테스트" + location.lat())
+                                        // console.log("테스트" + location.lng())
                                         setAddress("테스트");
                                         setLat(location.lat());
                                         setLng(location.lng());
@@ -246,6 +248,7 @@ const LocationWrite = ({ setCreateData }) => {
                 '<div id="content">' +
                 '<h3 id="firstHeading" class="firstHeading">이 주소가 맞나요?</h3>' +
                 '<div id="bodyContent">' +
+                '<div id="info"></div><br/>' +
                 "<p><b>이 주소가 아니라면 지도를 클릭하거나 마커를 드래그 해주세요.</b></p>" +
                 "</div>" +
                 "</div>";
@@ -316,6 +319,8 @@ const LocationWrite = ({ setCreateData }) => {
             });
         }
 
+        
+
         const script = document.createElement("script");
         script.src = `https://maps.googleapis.com/maps/api/js?key=${api.api}`;
         script.async = true;
@@ -346,14 +351,18 @@ const LocationWrite = ({ setCreateData }) => {
             address: address
           },
         }));
+
+        toggleLocationWrite();
       };
 
     return (
-        <>
+        <div className='Modal'>
             <div id="map"></div>
-            <button onClick={handleAddressSelect}>주소 선택 완료</button>
-        </>
+            <button className="map-button" onClick={handleAddressSelect}>주소 선택 완료</button>
+            <div id="info" style={{ display: 'none' }}></div>
+        </div>
     );
+    
 };
 
 export default LocationWrite;

@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itda.dto.ItemDTO;
 import com.itda.dto.LocationDTO;
 import com.itda.dto.LocationSelectedDTO;
+import com.itda.item.ItemService;
+import com.itda.mapper.ItemMapper;
 import com.itda.mapper.LocationMapper;
 import com.itda.users.Users;
 
@@ -24,6 +27,13 @@ public class LocationService {
 
     @Autowired
     private LocationMapper locationMapper;
+
+	@Autowired
+	private ItemService itemService;
+
+    @Autowired
+    private ItemMapper itemMapper;
+    
 
     //위치를 받아오면 보정해서 저장하는 서비스
     @Transactional
@@ -111,34 +121,63 @@ public class LocationService {
 
     //userNo를 받아와서 가까운 순으로 조회
     public List<LocationDTO> getMatchingDistance(Long userNo) throws Exception{
+    
+        List<LocationDTO> matchingDistances = locationMapper.getMatchingDistance(userNo);
 
-    List<LocationDTO> matchingDistances = locationMapper.getMatchingDistance(userNo);
+        if(matchingDistances.size() < 4){
+            return null;
+        }
+    
+        // pinn이 부족하면 돌려보냄
+        ItemDTO dto = itemMapper.getReadData(userNo);
+        int pinn = dto.getPinn();
+        if(pinn<30){
+            return null;
+        }
+    
+        ItemDTO itemDTO = new ItemDTO();
+    
+        itemDTO.setUserNo(userNo);
+        //여기서 한번 찾을때마다 쓸 핀 갯수 설정
+        int usePinnSearch = 30;
+        itemDTO.setPinn(usePinnSearch);
+        itemDTO.setDia(0);
+        //핀 사용하는 서비스
+        itemService.use(itemDTO);
 
-    if(matchingDistances.size() >= 4){
-        LocationSelectedDTO dto = new LocationSelectedDTO();
-        dto.setUserNo(userNo);
-        
+        List<LocationDTO> locations = locationMapper.getMatchingDistance(userNo);
+    
+        return matchingDistances.size() >= 4 ? locations.subList(0, Math.min(locations.size(), 4)) : null;
+    }
+    
+    public void selected(LocationSelectedDTO dto) throws Exception{
+
+        LocationSelectedDTO locationSelectedDTO = new LocationSelectedDTO();
+        locationSelectedDTO.setUserNo(dto.getUserNo());
+
+        List<LocationDTO> matchingDistances = locationMapper.getMatchingDistance(dto.getUserNo());
+
+
         // 모든 matchingDistances에서 userNo를 추출하여 selectedNo로 사용
         List<Long> selectedNos = new ArrayList<>();
-        for(LocationDTO locationDTO : matchingDistances) {
+        for (LocationDTO locationDTO : matchingDistances.subList(0, Math.min(matchingDistances.size(), 4))) {
             selectedNos.add(locationDTO.getUserNo());
         }
 
         // 각 selectedNo를 사용하여 locationMapper를 호출
         int count = 0;
         for (Long selectedNo : selectedNos) {
-            dto.setSelected(selectedNo);
-            locationMapper.selected(dto);
+
+            locationSelectedDTO.setSelected(selectedNo);
+
+            locationMapper.selected(locationSelectedDTO);
             
             count++;
             if (count >= 4) {
-                break; // 4번째 순서까지만 실행 후 루프 중단
+                break;
             }
         }
-    }
-    
-    return matchingDistances.size() >= 4 ? matchingDistances.subList(0, 4) : null;
-}
 
+    }
 
 }

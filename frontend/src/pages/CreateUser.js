@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import address from '../API_KEY';
-import LocationWrite from './LocationWrite'; // LocationWrite 컴포넌트를 import
+import LocationWrite from './LocationWrite';
 
 const CreateUser = (props) => {
   const [createData, setCreateData] = useState({
     users: {
       userId: '',
-      userPassword: ''
+      userPassword: '',
+      userGender: ''
     },
     location: {
       lat: '',
@@ -45,7 +46,7 @@ const CreateUser = (props) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        props.history.push('/');
+        props.history.push('/complete');
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -80,6 +81,32 @@ const CreateUser = (props) => {
             onChange={handleChange}
           />
         </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>성별</Form.Label>
+          <div>
+            <Form.Check
+              inline
+              label="남자"
+              type="radio"
+              id="gender-male"
+              name="users.userGender"
+              value="male"
+              checked={createData.users.userGender === "male"}
+              onChange={handleChange}
+            />
+            <Form.Check
+              inline
+              label="여자"
+              type="radio"
+              id="gender-female"
+              name="users.userGender"
+              value="female"
+              checked={createData.users.userGender === "female"}
+              onChange={handleChange}
+            />
+          </div>
+        </Form.Group>
+
         
 
         <Form.Group className="mb-3">
@@ -89,6 +116,7 @@ const CreateUser = (props) => {
             name="location.address"
             value={createData.location.address}
             onChange={handleChange}
+            disabled="disabled"
           />
         </Form.Group>
 
@@ -101,30 +129,32 @@ const CreateUser = (props) => {
         
         {/* isOpen 상태에 따라 LocationWrite 컴포넌트를 보여주거나 감춥니다 */}
         {isOpen && (
-          <LocationWrite setCreateData={setCreateData} />
+          <LocationWrite setCreateData={setCreateData} toggleLocationWrite={toggleLocationWrite}/>
         )}
         <br/>
 
         <Form onSubmit={handleSubmit}>
 
         <Form.Group className="mb-3">
-          <Form.Label>위도</Form.Label>
+          <Form.Label style={{display:'none'}}>위도</Form.Label>
           <Form.Control
             type="text"
             name="location.lat"
             value={createData.location.lat}
             onChange={handleChange}
             disabled="disabled"
+            style={{display:'none'}}
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>경도</Form.Label>
+          <Form.Label style={{display:'none'}}>경도</Form.Label>
           <Form.Control
             type="text"
             name="location.lng"
             value={createData.location.lng}
             onChange={handleChange}
             disabled="disabled"
+            style={{display:'none'}}
           />
         </Form.Group>
 

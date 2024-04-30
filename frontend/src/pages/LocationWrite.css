@@ -1,4 +1,55 @@
 #map {
-    height: 500px;
-    width: 100%;
+  height: 500px;
+  width: 70%;
 }
+
+
+.Modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 모달의 z-index를 높게 설정합니다. */
+}
+
+.map-container {
+  position: relative; /* 부모 요소를 상대 위치로 설정하여 자식 요소를 포지셔닝할 수 있도록 합니다. */
+  width: 100%; /* 부모 요소의 크기를 가득 채우도록 설정합니다. */
+  height: 400px; /* 지도의 높이에 맞게 설정합니다. */
+}
+
+.map-button {
+  position: absolute; /* 버튼을 절대 위치로 설정하여 부모 요소에 대해 상대적으로 배치합니다. */
+  bottom: 80px;
+  left: 45.5%;
+  z-index: 1;
+  background-color: #cc99cc;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  color: #ffffff;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 50px;
+  margin: 8px 0 22px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+/* MapModal.css */
+
+.Modal {}
+.Modal .bg { position: fixed; width: 100%; height: 100%; left: 0; top: 0; background-color: #000; opacity: 0.7;}
+.Modal .popup { position: fixed; width: 600px; height: 600px; left: 50%; top: 50%; background-color: #fff; transform: translate(-50%, -50%); padding: 20px;}
+.Modal .popup h2 { font-size: 25px; }
+.Modal .popup div { width: 100%; height: 450px; overflow: hidden;}
+.Modal .popup iframe { width: 100%; height: 450px;}
+.Modal .popup p { font-size: 25px; margin-top: 10px;}
+.Modal .popup span {position: absolute; right: 20px; top: 20px; }
+.Modal .popup span i {font-size: 35px;}

@@ -63,6 +63,7 @@ public class Users implements Serializable {
     @Column(name = "user_MBTI")
     private String userMBTI;
 
+    //안씀
     @Column(name = "user_category")
     private String userCategory;
 

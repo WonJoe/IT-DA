@@ -8,7 +8,7 @@ const Header = () => {
         <Container> 
           <Link to="/" className="navbar-brand">Navbar</Link> 
           <Nav className="me-auto"> 
-            <Link to ="/" className="nav-link">홈</Link>|
+            <Link to ="/" className="nav-link">홈</Link>
             <Link to ="/distanceReq" className="nav-link">거리순 매칭</Link>
             <Link to ="/createUser" className="nav-link">회원가입</Link>
           </Nav> 

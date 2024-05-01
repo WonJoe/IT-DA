@@ -21,6 +21,7 @@ const DistanceReq = (props) => {
         })
         .then(res=>{
             console.log(res)
+            console.log(res.data)
             setData(res.data)
             setLoading(false)
             setError('')
@@ -46,8 +47,9 @@ const DistanceReq = (props) => {
                             data.map((item, index) => (
                                 <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
                                     <p>아이디: {item.userNo}</p>
-                                    <p>주소: {item.address}</p>
+                                    <p>주소: {item.address.split(' ').filter((part, index) => index !== 0 && index !==  item.address.split(' ').length - 1).join(' ')}</p>
                                     <p>거리: {item.distance}Km 떨어짐</p>
+                                    <p>아이디: {item.user_id}</p>
                                 </div>
                             ))
                         ) : (

@@ -13,5 +13,6 @@ public class LocationDTO {
     private String LAT;
     private String LNG;
     private String distance;
+    private String user_id;
 
 }

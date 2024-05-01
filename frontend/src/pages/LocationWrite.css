@@ -1,5 +1,5 @@
 #map {
-  height: 500px;
+  height: 70%;
   width: 70%;
 }
 
@@ -25,8 +25,7 @@
 
 .map-button {
   position: absolute; /* 버튼을 절대 위치로 설정하여 부모 요소에 대해 상대적으로 배치합니다. */
-  bottom: 80px;
-  left: 45.5%;
+  bottom: 20%;
   z-index: 1;
   background-color: #cc99cc;
   border: 2px solid #fff;
@@ -37,8 +36,8 @@
   font-family: Roboto, Arial, sans-serif;
   font-size: 20px;
   line-height: 50px;
-  margin: 8px 0 22px;
-  padding: 0 5px;
+  margin: 0px 0 0px;
+  padding: 0 10px;
   text-align: center;
 }
 
@@ -48,8 +47,8 @@
 .Modal .bg { position: fixed; width: 100%; height: 100%; left: 0; top: 0; background-color: #000; opacity: 0.7;}
 .Modal .popup { position: fixed; width: 600px; height: 600px; left: 50%; top: 50%; background-color: #fff; transform: translate(-50%, -50%); padding: 20px;}
 .Modal .popup h2 { font-size: 25px; }
-.Modal .popup div { width: 100%; height: 450px; overflow: hidden;}
-.Modal .popup iframe { width: 100%; height: 450px;}
+.Modal .popup div { width: 100%; height: 100%; overflow: hidden;}
+.Modal .popup iframe { width: 100%; height: 100%;}
 .Modal .popup p { font-size: 25px; margin-top: 10px;}
 .Modal .popup span {position: absolute; right: 20px; top: 20px; }
 .Modal .popup span i {font-size: 35px;}

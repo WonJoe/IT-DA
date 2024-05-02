@@ -356,7 +356,7 @@ const LocationWrite = ({ setCreateData, toggleLocationWrite }) => {
       };
 
     return (
-        <div className='Modal'>
+        <div className='ModalLocation'>
             <div id="map"></div>
             <button className="map-button" onClick={handleAddressSelect}>주소 선택 완료</button>
             <div id="info" style={{ display: 'none' }}></div>

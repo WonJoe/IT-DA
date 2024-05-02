@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import address from '../API_KEY'
+import address from '../API_KEY';
+import { Button, Form } from 'react-bootstrap';
+
 
 const DistanceReq = (props) => {
 
@@ -38,15 +40,22 @@ const DistanceReq = (props) => {
 
     return (
         <div style={{ width: '100%' }}>
-            <input width={500} type='text' value={valueId} onChange={evt => setValueId(evt.target.value)}/>
-            <button onClick={search}>검색</button>
+            <Form.Label>UserNo</Form.Label>
+            <Form.Control
+                type="text"
+                name="users.userId"
+                value={valueId}
+                onChange={evt => setValueId(evt.target.value)}
+            />
+            {/* <input width={500} type='text' value={valueId} onChange={evt => setValueId(evt.target.value)}/> */}
+            <Button onClick={search}>검색</Button>
             <div>
                 {loading ? <h4>로딩중...</h4> : (
                     <div>
                         {data && data.length > 0 ? (
                             data.map((item, index) => (
                                 <div key={index} style={{ borderWidth: 2, borderStyle: 'solid' }}>
-                                    <p>아이디: {item.userNo}</p>
+                                    <p>userNo: {item.userNo}</p>
                                     <p>주소: {item.address.split(' ').filter((part, index) => index !== 0 && index !==  item.address.split(' ').length - 1).join(' ')}</p>
                                     <p>거리: {item.distance}Km 떨어짐</p>
                                     <p>아이디: {item.user_id}</p>

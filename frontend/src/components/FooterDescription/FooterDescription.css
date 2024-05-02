@@ -42,17 +42,21 @@ table {
     border-collapse: collapse;
 }
 
-.privacy-policy-table td, .privacy-policy-table th {
+.privacy-policy-table td {
     word-break: keep-all;
     border-width: 1px;
     padding: .5rem;
+    padding-left: 5px;
 }
 
-.number-part {
+td.number-part {
     vertical-align: top;
+    width: 25px;
+
 }
 
 .number-p {
     font-size: 0.8em;
     padding-left: 2em;
 }
+

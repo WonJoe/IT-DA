@@ -10,8 +10,9 @@ const PrivacyPolicy = () => {
             <h2>1. 수집하는 개인정보 항목</h2>
                 <p>ITDA는 회원가입 의사 확인, 회원제 서비스에 따른 회원 자격 인증 및 식별, 회원 자격 유지 관리, 웹사이트 서비스의 정상적 제공, 서비스 부정이용 방지, 분쟁 조정을 위한 기록 보존 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.</p>
             <h3>1.1. 수집항목</h3>
-                <p>
+                
                     <table className='privacy-policy-table'>
+                        <tbody>
                         <tr>
                             <th>처리목적</th>
                             <th>수집항목</th>
@@ -62,8 +63,9 @@ const PrivacyPolicy = () => {
                                 이름, 계좌정보(예금주명, 은행명, 계좌번호) 주민등록번호 (소득세 등 세금 관련 법령에 따름)
                             </td>
                         </tr>
+                        </tbody>
                     </table>
-                </p>
+                
             <h3>1.2. 개인정보 수집방법</h3>
                 <ul>
                     <li>
@@ -115,8 +117,9 @@ const PrivacyPolicy = () => {
                 <p>
                 ITDA는 회원가입일로부터 서비스를 제공하는 기간 동안에 한하여 이용자의 개인정보를 보유 및 이용합니다.
                 </p>
-                <p>
+                
                     <table className='privacy-policy-table'>
+                        <tbody>
                         <tr>
                             <th>보존항목</th>
                             <th>근거법령</th>
@@ -172,8 +175,9 @@ const PrivacyPolicy = () => {
                             <td>국세기본법, 법인세법, 부가가치세법</td>
                             <td>5년</td>
                         </tr>
+                        </tbody>
                     </table>
-                </p>
+                
             <h2>4. 개인정보의 제3자 제공</h2>
                 <ol>
                     <li>
@@ -211,8 +215,9 @@ const PrivacyPolicy = () => {
                 <p>
                 ITDA는 서비스 향상을 위해 아래와 같이 이용자의 개인정보를 위탁하고 있으며, 관계 법령에 따라 위탁계약 시 개인정보가 안전하게 관리될 수 있도록 필요한 사항을 규정하고 있습니다.
                 </p>
-                <p>
+                
                     <table className='privacy-policy-table'>
+                        <tbody>
                         <tr>
                             <th>수탁 업체</th>
                             <th>위탁업무 내용</th>
@@ -233,8 +238,9 @@ const PrivacyPolicy = () => {
                             <td>결제수단 인증 및 결제처리</td>
                             <td>	회원 탈퇴시, 서비스 종료시 또는 위탁 계약 종료시까지</td>
                         </tr>
+                        </tbody>
                     </table>
-                </p>
+                
                 <p>
                 ITDA는 다음과 같이 개인정보 처리 업무 중 일부를 국외 사업자에게 이전하고 있습니다.
                 </p>

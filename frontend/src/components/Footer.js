@@ -28,9 +28,9 @@ const Footer = () => {
           <div className="col-6 col-md-3" style={{width : '100%'}}>
             {/* <h6>Quick Links</h6> */}
             <ul className="footer-links">
-              <li><a href="/ConditionsOfUse">이용약관</a></li>
+              <li><a href="/ConditionsOfUse">개인정보 처리방침</a></li>
               <LuGripVertical />
-              <li><a href="/PrivacyPolicy">개인정보 처리방침</a></li>
+              <li><a href="/PrivacyPolicy">이용약관</a></li>
               <LuGripVertical />
               <li><a href="/LocationServicePolicy">위치기반서비스 이용약관</a></li>
               <LuGripVertical />
